@@ -82,15 +82,17 @@ console.log(location)
       <div> {{ filters }}</div>
 
       <h1> BOSS filtré</h1>
+      <div class="CardList">
+        <div v-for="e in data?.data">
+          <div class="card" v-if="filters.includes(e.Bosse_location.location) ">
 
-      <div v-for="e in data?.data">
-        <div v-if="filters.includes(e.Bosse_location.location) ">
+            <a>{{ e.name }} </a>
+            <a> {{ e.Surname }} </a>
 
-          <a>{{ e.name }} {{ e.Surname }}</a>
-          <a> {{ e.image.formats.thumbnail.url }}</a>
 
-          <img :src="e.image.formats.thumbnail.url " />
+            <img :src="e.image.formats.thumbnail.url " />
 
+          </div>
         </div>
       </div>
 
@@ -113,6 +115,44 @@ console.log(location)
 </template>
 
 <style scoped>
+.CardList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* Centers the cards horizontally */
+  flex-direction: row;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 300px;
+  /* Set your desired width */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 300px;
+}
+
+.card a {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
 /* <UPagination v-model="page"  :page-count="data?.meta.total"  :total="data?.meta.total" /> */
 button {
   margin: 10px;
