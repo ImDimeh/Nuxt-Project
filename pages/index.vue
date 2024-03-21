@@ -87,11 +87,9 @@ console.log(location)
         <div v-if="filters.includes(e.Bosse_location.location) ">
 
           <a>{{ e.name }} {{ e.Surname }}</a>
-          <a> {{ e.image.formats.small }}</a>
+          <a> {{ e.image.formats.thumbnail.url }}</a>
 
-          <img
-            :src="e.image.formats.small.url || `https://image.api.playstation.com/vulcan/ap/rnd/202107/1612/Y5RHNmzAtc6sRYwZlYiKHAxN.png`"  alt="
-            image" />
+          <img :src="e.image.formats.thumbnail.url " />
 
         </div>
       </div>
