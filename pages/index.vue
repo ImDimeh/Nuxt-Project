@@ -9,24 +9,28 @@ let filteredData = ref([])
 function addToFilters(param) {
   if (!filters.value.includes(param)) {
     filters.value.push(param)
-    console.log("FILTER VALUE" ,filters.value)
+    console.log("FILTER VALUE", filters.value)
     console.log(data)
   } else {
     filters.value = filters.value.filter(e => e !== param)
-    console.log("FILTER VALUE" ,filters.value)
+    console.log("FILTER VALUE", filters.value)
     console.log(data)
   }
 }
 
 
-  
+
 const { find } = useStrapi()
 // Nom de la collection
 // Nom de la collection
 const { data, pending: bosesPending, error } = useAsyncData('boses', () => {
   return find('boses', {
     populate: '*',
-    
+    pagination: {
+      page: page.value,
+      pageSize: 3
+    },
+
   })
 }, {
   watch: [page, Pagesize, filters]
@@ -38,20 +42,20 @@ const { data, pending: bosesPending, error } = useAsyncData('boses', () => {
 
 
 
-const { data: location, pending: locationPending  , refresh} = useAsyncData('locations', () => {
+const { data: location, pending: locationPending, refresh } = useAsyncData('locations', () => {
   return find('locations', {
     populate: '*',
     pagination: {
       page: page.value,
       pageSize: Pagesize.value
     },
-    
+
 
   })
-    
 
-},{
-    watch: [page, Pagesize, filters],
+
+}, {
+  watch: [page, Pagesize, filters],
 })
 
 
@@ -84,16 +88,17 @@ console.log(location)
       <h1> BOSS filtré</h1>
       <div class="CardList">
         <div v-for="e in data?.data">
-          <div class="card" v-if="filters.includes(e.Bosse_location.location) ">
+          <div class="card" v-if="filters.includes(e.Bosse_location.location)">
 
             <a>{{ e.name }} </a>
             <a> {{ e.Surname }} </a>
 
 
-            <img :src="e.image.formats.thumbnail.url " />
+            <img :src="e.image.formats.thumbnail.url" />
 
           </div>
         </div>
+
       </div>
 
 
@@ -104,8 +109,20 @@ console.log(location)
 
 
       <h2>Les boses</h2>
-      <div v-for="e in data?.data" :key="e.slug">
-        <a :href="`/boses/${e.slug}`" :key="e.id" class="underline">{{ e.name }}</a>
+      <div class="CardList">
+        <div v-for="e in data?.data">
+          <div class="card">
+
+            <a>{{ e.name }} </a>
+            <a> {{ e.Surname }} </a>
+
+
+            <img :src="e.image.formats.thumbnail.url" />
+
+          </div>
+        </div>
+
+        <UPagination v-model="page" :page-count="data.meta.pagination.pageCount" :total="data.meta.pagination.total" />
       </div>
 
 
@@ -162,15 +179,16 @@ button {
   border-radius: 5px;
   color: #000;
 }
+
 .LocattionList {
   padding: 10px;
-  
-  
+
+
   border: 1px solid #000;
   border-radius: 5px;
   /* color: #000; */
   display: flex;
   flex-direction: row;
   width: auto;
-} 
+}
 </style>
